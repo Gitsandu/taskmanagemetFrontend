@@ -20,8 +20,7 @@ A modern, responsive task management application built with React, Material UI, 
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd codework-frontend
+   git clone git@github.com:Gitsandu/taskmanagemetFrontend.git
    ```
 
 2. Install dependencies:
