@@ -5,8 +5,8 @@ const authService = {
     try {
       const response = await axiosInstance.post('/auth/login', { email, password });
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify({
+        localStorage.setItem(import.meta.env.VITE_AUTH_TOKEN_KEY, response.data.token);
+        localStorage.setItem(import.meta.env.VITE_USER_DATA_KEY, JSON.stringify({
           id: response.data._id,
           username: response.data.username,
           email: response.data.email
@@ -22,8 +22,8 @@ const authService = {
     try {
       const response = await axiosInstance.post('/auth/signup', { username, email, password });
       if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify({
+        localStorage.setItem(import.meta.env.VITE_AUTH_TOKEN_KEY, response.data.token);
+        localStorage.setItem(import.meta.env.VITE_USER_DATA_KEY, JSON.stringify({
           id: response.data._id,
           username: response.data.username,
           email: response.data.email
@@ -36,12 +36,12 @@ const authService = {
   },
 
   logout: () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem(import.meta.env.VITE_AUTH_TOKEN_KEY);
+    localStorage.removeItem(import.meta.env.VITE_USER_DATA_KEY);
   },
 
   getCurrentUser: () => {
-    const userStr = localStorage.getItem('user');
+    const userStr = localStorage.getItem(import.meta.env.VITE_USER_DATA_KEY);
     if (userStr) {
       return JSON.parse(userStr);
     }
@@ -49,7 +49,7 @@ const authService = {
   },
 
   isAuthenticated: () => {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem(import.meta.env.VITE_AUTH_TOKEN_KEY);
   }
 };
 

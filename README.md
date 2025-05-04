@@ -31,7 +31,7 @@ A modern, responsive task management application built with React, Material UI, 
 
 3. Create a `.env` file in the root directory with the following content:
    ```
-   REACT_APP_API_BASE_URL=http://localhost:5000/api
+   VITE_API_BASE_URL=http://localhost:5000/api
    ```
    Note: Adjust the API URL if your backend is running on a different port or host.
 
@@ -127,13 +127,9 @@ The application is optimized for various screen sizes:
 
 1. **API Connection Errors**:
    - Verify that the backend server is running
-   - Check that the `REACT_APP_API_BASE_URL` in your `.env` file is correct
+   - Check that the `VITE_API_BASE_URL` in your `.env` file is correct
 
 2. **Build Errors**:
    - Run `npm clean-install` to ensure dependencies are correctly installed
    - Check for any console errors during build
-
-## License
-
-[MIT](LICENSE)
 

@@ -9,7 +9,14 @@ import {
   Button, 
   CircularProgress,
   Alert,
-  Divider
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  useMediaQuery,
+  useTheme
 } from '@mui/material';
 import { 
   ArrowBack, 
@@ -18,7 +25,8 @@ import {
   Edit, 
   Delete,
   CheckCircle,
-  RestoreFromTrash
+  RestoreFromTrash,
+  MoreVert
 } from '@mui/icons-material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -44,10 +52,13 @@ const getPriorityColor = (priority) => {
 const TaskDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [task, setTask] = useState(null);
   const [openTaskForm, setOpenTaskForm] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [error, setError] = useState(null);
+  const [menuAnchorEl, setMenuAnchorEl] = useState(null);
   
   const { loading, execute: fetchTask } = useApi(taskService.getTaskById);
 
@@ -116,6 +127,24 @@ const TaskDetailsPage = () => {
     navigate('/');
   };
 
+  const handleMenuOpen = (event) => {
+    setMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setMenuAnchorEl(null);
+  };
+
+  const handleMenuEdit = () => {
+    handleMenuClose();
+    handleEditTask();
+  };
+
+  const handleMenuDelete = () => {
+    handleMenuClose();
+    handleDeleteClick();
+  };
+
   if (loading) {
     return (
       <MainLayout>
@@ -135,13 +164,26 @@ const TaskDetailsPage = () => {
           <Alert severity="error" sx={{ my: 4 }}>
             {error}
           </Alert>
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBack />}
-            onClick={handleBack}
-          >
-            Back to Tasks
-          </Button>
+          {isMobile ? (
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
+              onClick={handleBack}
+              fullWidth
+            >
+              Back to Tasks
+            </Button>
+          ) : (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
+              <Button
+                variant="outlined"
+                startIcon={<ArrowBack />}
+                onClick={handleBack}
+              >
+                Back to Tasks
+              </Button>
+            </Box>
+          )}
         </Container>
       </MainLayout>
     );
@@ -154,13 +196,26 @@ const TaskDetailsPage = () => {
           <Alert severity="info" sx={{ my: 4 }}>
             Task not found
           </Alert>
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBack />}
-            onClick={handleBack}
-          >
-            Back to Tasks
-          </Button>
+          {isMobile ? (
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
+              onClick={handleBack}
+              fullWidth
+            >
+              Back to Tasks
+            </Button>
+          ) : (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
+              <Button
+                variant="outlined"
+                startIcon={<ArrowBack />}
+                onClick={handleBack}
+              >
+                Back to Tasks
+              </Button>
+            </Box>
+          )}
         </Container>
       </MainLayout>
     );
@@ -170,14 +225,28 @@ const TaskDetailsPage = () => {
     <MainLayout>
       <Container maxWidth="md">
         <Box sx={{ my: 4 }}>
-          <Button
-            variant="outlined"
-            startIcon={<ArrowBack />}
-            onClick={handleBack}
-            sx={{ mb: 3 }}
-          >
-            Back to Tasks
-          </Button>
+          {isMobile ? (
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
+              onClick={handleBack}
+              fullWidth
+              sx={{ mb: 3 }}
+            >
+              Back to Tasks
+            </Button>
+          ) : (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', width: '100%' }}>
+              <Button
+                variant="outlined"
+                startIcon={<ArrowBack />}
+                onClick={handleBack}
+                sx={{ mb: 3 }}
+              >
+                Back to Tasks
+              </Button>
+            </Box>
+          )}
 
           <Paper elevation={2} sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
@@ -192,22 +261,57 @@ const TaskDetailsPage = () => {
               </Typography>
               
               <Box>
-                <Button
-                  variant="outlined"
-                  startIcon={<Edit />}
-                  onClick={handleEditTask}
-                  sx={{ mr: 1 }}
-                >
-                  Edit
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  startIcon={<Delete />}
-                  onClick={handleDeleteClick}
-                >
-                  Delete
-                </Button>
+                {isMobile ? (
+                  <>
+                    <IconButton
+                      aria-label="more options"
+                      aria-controls="task-menu"
+                      aria-haspopup="true"
+                      onClick={handleMenuOpen}
+                    >
+                      <MoreVert />
+                    </IconButton>
+                    <Menu
+                      id="task-menu"
+                      anchorEl={menuAnchorEl}
+                      keepMounted
+                      open={Boolean(menuAnchorEl)}
+                      onClose={handleMenuClose}
+                    >
+                      <MenuItem onClick={handleMenuEdit}>
+                        <ListItemIcon>
+                          <Edit fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Edit" />
+                      </MenuItem>
+                      <MenuItem onClick={handleMenuDelete}>
+                        <ListItemIcon>
+                          <Delete fontSize="small" color="error" />
+                        </ListItemIcon>
+                        <ListItemText primary="Delete" sx={{ color: 'error.main' }} />
+                      </MenuItem>
+                    </Menu>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="outlined"
+                      startIcon={<Edit />}
+                      onClick={handleEditTask}
+                      sx={{ mr: 1 }}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      startIcon={<Delete />}
+                      onClick={handleDeleteClick}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
               </Box>
             </Box>
 
