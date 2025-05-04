@@ -31,8 +31,17 @@ A modern, responsive task management application built with React, Material UI, 
 3. Create a `.env` file in the root directory with the following content:
    ```
    VITE_API_BASE_URL=http://localhost:5000/api
+   VITE_AUTH_TOKEN_KEY=token
+   VITE_USER_DATA_KEY=user
    ```
-   Note: Adjust the API URL if your backend is running on a different port or host.
+   
+   **Environment Variables:**
+   
+   - `VITE_API_BASE_URL`: Base URL for API requests (adjust if your backend is running on a different port or host)
+   - `VITE_AUTH_TOKEN_KEY`: Local storage key for storing the authentication token
+   - `VITE_USER_DATA_KEY`: Local storage key for storing user data
+   
+   <span style="color:red">**NOTE:** This application uses browser local storage for maintaining authentication state. User tokens and data are stored locally on the client device. For production environments, consider implementing more secure token storage methods.</span>
 
 ## Running the Application
 
@@ -127,6 +136,7 @@ The application is optimized for various screen sizes:
 1. **API Connection Errors**:
    - Verify that the backend server is running
    - Check that the `VITE_API_BASE_URL` in your `.env` file is correct
+   - Ensure all required environment variables are properly set in your `.env` file
 
 2. **Build Errors**:
    - Run `npm clean-install` to ensure dependencies are correctly installed
